@@ -38,6 +38,8 @@
 #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <boost/range/iterator_range.hpp>
 
 #include <boost/system/error_code.hpp>
