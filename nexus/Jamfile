@@ -1,0 +1,9 @@
+import pch ;
+
+cpp-pch pch : pch.h : <include>. <toolset>gcc:<location>. ;
+explicit pch ;
+
+lib nexus
+    : pch [ glob *.cpp ] 
+      /site-config//urdl
+    ;
