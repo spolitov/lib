@@ -65,4 +65,3 @@ Tracer<Handler> tracer(Logger & logger, const Handler & handler, bool restart = 
 }
 
 }
-

@@ -71,6 +71,7 @@
 #include <mstd/threads.hpp>
 
 #include <mlog/Logging.h>
+#include <mlog/ThreadTrace.h>
 
 #include <mcrypt/MD5.h>
 #include <mcrypt/Utils.h>
@@ -85,8 +86,6 @@
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/windows/overlapped_ptr.hpp>
 #include <boost/asio/windows/stream_handle.hpp>
-
-#include <mlog/ThreadTrace.h>
 
 #endif
 
