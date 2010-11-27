@@ -9,6 +9,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/fstream.hpp>
 
 #include <boost/utility/in_place_factory.hpp>
 
