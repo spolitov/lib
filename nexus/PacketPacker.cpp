@@ -30,6 +30,19 @@ void StringPacker::pack(char *& out, const std::string & input)
     out += len;
 }
 
+size_t StringPacker::packSize(const StringWithLen & input)
+{
+    return input.len + 2;
+}
+
+void StringPacker::pack(char *& out, const StringWithLen & input)
+{
+    size_t len = input.len;
+    write<boost::uint16_t>(out, len);
+    memcpy(out, input.data, len);
+    out += len;
+}
+
 size_t ShortStringRef::packSize() const
 {
     return ref_->length() + 1;

@@ -144,12 +144,23 @@ CString<Ch> cString(const Ch * str)
     return CString<Ch>(str);
 }
 
+struct StringWithLen {
+    const char * data;
+    size_t len;
+
+    StringWithLen(const char * d, size_t l)
+        : data(d), len(l) {}
+};
+
 struct NEXUS_DECL StringPacker {
     static size_t packSize(const char * input);
     static void pack(char *& out, const char * input);
 
     static size_t packSize(const std::string & input);
     static void pack(char *& out, const std::string & input);
+
+    static size_t packSize(const StringWithLen & input);
+    static void pack(char *& out, const StringWithLen & input);
 };
 
 struct NEXUS_DECL RawDataPacker {
