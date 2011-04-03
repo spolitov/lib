@@ -20,47 +20,31 @@ public:
 typedef mstd::handle_base<BIGNUM*, mstd::comparable_traits<BNTraits> > BNHolder;
 
 //////////////////////////////////////////////////////////////////////////
-// class RSA::Holder
-//////////////////////////////////////////////////////////////////////////
-
-class RSATraits {
-public:
-    static ::RSA* null() { return NULL; }
-    static void close(::RSA * rsa) { RSA_free(rsa); }
-};
-
-typedef mstd::handle_base< ::RSA*, mstd::comparable_traits<RSATraits> > HolderBase;
-
-class RSA::Holder : public HolderBase {
-public:
-    Holder(::RSA * rsa) 
-        : HolderBase(rsa) {}
-};
-
-//////////////////////////////////////////////////////////////////////////
 // class RSA
 //////////////////////////////////////////////////////////////////////////
 
-static void handleError()
+namespace {
+
+void handleError()
 {
     error_t err = ERR_get_error();
     if(err)
         throw RSAException(err);
 }
 
-static void checkError(int result)
+void checkError(int result)
 {
     if(result == -1)
         handleError();
 }
 
-static void invokeListener(int a, int b, void * raw)
+void invokeListener(int a, int b, void * raw)
 {
     RSA::GenerateListener * listener = static_cast<RSA::GenerateListener*>(raw);
     (*listener)(a, b);
 }
 
-static BIGNUM * extractBignum(std::vector<char>::const_iterator & i, std::vector<char>::const_iterator end)
+BIGNUM * extractBignum(std::vector<char>::const_iterator & i, std::vector<char>::const_iterator end)
 {
     if(end - i < 4)
         throw RSAException(0);
@@ -73,9 +57,21 @@ static BIGNUM * extractBignum(std::vector<char>::const_iterator & i, std::vector
     return result;
 }
 
+::RSA * extractRsa(EVP_PKEY *& key)
+{
+	if(!key)
+        return 0;
+	::RSA * rtmp = EVP_PKEY_get1_RSA(key);
+	EVP_PKEY_free(key);
+    key = 0;
+	return rtmp;
+}
+
+}
+
 RSAPtr RSA::generateKey(int num, unsigned long e, const mcrypt::RSA::GenerateListener & listener)
 {
-    return RSAPtr(new RSA(new RSA::Holder(RSA_generate_key(num, e, invokeListener, const_cast<void*>(static_cast<const void*>(&listener))))));
+    return RSAPtr(new RSA(RSA_generate_key(num, e, invokeListener, const_cast<void*>(static_cast<const void*>(&listener)))));
 }
 
 RSAPtr RSA::createFromPublicKey(const std::vector<char> & src)
@@ -84,13 +80,13 @@ RSAPtr RSA::createFromPublicKey(const std::vector<char> & src)
     BNHolder n(extractBignum(i, src.end()));
     BNHolder e(extractBignum(i, src.end()));
     
-    scoped_ptr<RSA::Holder> holder(new RSA::Holder(RSA_new()));
-    if(!holder->handle())
+    ::RSA * impl = RSA_new();
+    if(!impl)
         handleError();
-    holder->handle()->n = n.release();
-    holder->handle()->e = e.release();
+    impl->n = n.release();
+    impl->e = e.release();
     
-    return RSAPtr(new RSA(holder));
+    return RSAPtr(new RSA(impl));
 }
 
 RSAPtr RSA::createFromPrivateKey(const std::vector<char> & src)
@@ -105,55 +101,74 @@ RSAPtr RSA::createFromPrivateKey(const std::vector<char> & src)
     BNHolder dmq1(extractBignum(i, src.end()));
     BNHolder iqmp(extractBignum(i, src.end()));
 
-    scoped_ptr<RSA::Holder> holder(new RSA::Holder(RSA_new()));
-    if(!holder->handle())
+    ::RSA * impl = RSA_new();
+    if(!impl)
         handleError();
-    holder->handle()->n = n.release();
-    holder->handle()->e = e.release();
-    holder->handle()->d = d.release();
-    holder->handle()->p = p.release();
-    holder->handle()->q = q.release();
-    holder->handle()->dmp1 = dmp1.release();
-    holder->handle()->dmq1 = dmq1.release();
-    holder->handle()->iqmp = iqmp.release();
+
+    BOOST_SCOPE_EXIT((&impl)) {
+        if(impl)
+            RSA_free(impl);
+    } BOOST_SCOPE_EXIT_END;
+
+    impl->n = n.release();
+    impl->e = e.release();
+    impl->d = d.release();
+    impl->p = p.release();
+    impl->q = q.release();
+    impl->dmp1 = dmp1.release();
+    impl->dmq1 = dmq1.release();
+    impl->iqmp = iqmp.release();
         
-    int code = RSA_check_key(holder->handle());
+    int code = RSA_check_key(impl);
     
     checkError(code);
     
     if(code == 0)
         throw RSAException(0);
     
-    return RSAPtr(new RSA(holder));
+    RSAPtr result(new RSA(impl));
+    impl = 0;
+    return result;
 }
 
-RSA::RSA(RSA::Holder * holder)
-    : holder_(holder)
+RSAPtr RSA::createFromPublicPem(const void * buf, size_t len)
 {
-    if(!holder->handle())
+    BIO * bmem = BIO_new_mem_buf(const_cast<void*>(buf), len);
+    EVP_PKEY * key = PEM_read_bio_PUBKEY(bmem, 0, 0, 0);
+    BIO_free_all(bmem);
+
+    if(key)
+    {
+        ::RSA * rsa = extractRsa(key);
+        if(key)
+            EVP_PKEY_free(key);
+        if(rsa)
+        {
+            RSAPtr result(new RSA(rsa));
+            return result;
+        } else
+            handleError();
+    } else
         handleError();
+    throw RSAException(0);
 }
 
-RSA::RSA(scoped_ptr<RSA::Holder> & holder)
+RSA::RSA(::RSA * impl)
+    : impl_(impl)
 {
-    holder_.swap(holder);
-
-    if(!holder_->handle())
+    if(!impl_)
         handleError();
 }
 
 RSA::~RSA()
 {
-}
-
-const RSA::Holder & RSA::holder() const
-{
-    return *holder_;
+    if(impl_)
+        RSA_free(impl_);
 }
 
 int RSA::size() const
 {
-    return RSA_size(holder().handle());
+    return RSA_size(impl_);
 }
 
 typedef vector<BIGNUM*> BigNums;
@@ -207,22 +222,22 @@ static std::vector<char> process(Func func, const char * src, size_t len, ::RSA 
 
 std::vector<char> RSA::publicEncrypt(const char * src, size_t len, Padding padding) const
 {
-    return process(&RSA_public_encrypt, src, len, holder().handle(), getPadding(padding, true));
+    return process(&RSA_public_encrypt, src, len, impl_, getPadding(padding, true));
 }
 
 std::vector<char> RSA::publicDecrypt(const char * src, size_t len,  Padding padding) const
 {
-    return process(&RSA_public_decrypt, src, len, holder().handle(), getPadding(padding, false));
+    return process(&RSA_public_decrypt, src, len, impl_, getPadding(padding, false));
 }
 
 std::vector<char> RSA::privateEncrypt(const char * src, size_t len, Padding padding) const
 {
-    return process(&RSA_private_encrypt, src, len, holder().handle(), getPadding(padding, false));
+    return process(&RSA_private_encrypt, src, len, impl_, getPadding(padding, false));
 }
 
 std::vector<char> RSA::privateDecrypt(const char * src, size_t len, Padding padding) const
 {
-    return process(&RSA_private_decrypt, src, len, holder().handle(), getPadding(padding, true));
+    return process(&RSA_private_decrypt, src, len, impl_, getPadding(padding, true));
 }
 
 size_t getPaddingTail(int padding)
@@ -274,27 +289,27 @@ static std::vector<char> processEx(Func func, const char * src, size_t len, ::RS
 
 std::vector<char> RSA::publicEncryptEx(const char * src, size_t len, Padding padding) const
 {
-    return processEx(&RSA_public_encrypt, src, len, holder().handle(), true, getPadding(padding, true));
+    return processEx(&RSA_public_encrypt, src, len, impl_, true, getPadding(padding, true));
 }
 
 std::vector<char> RSA::publicDecryptEx(const char * src, size_t len,  Padding padding) const
 {
-    return processEx(&RSA_public_decrypt, src, len, holder().handle(), false, getPadding(padding, false));
+    return processEx(&RSA_public_decrypt, src, len, impl_, false, getPadding(padding, false));
 }
 
 std::vector<char> RSA::privateEncryptEx(const char * src, size_t len, Padding padding) const
 {
-    return processEx(&RSA_private_encrypt, src, len, holder().handle(), true, getPadding(padding, false));
+    return processEx(&RSA_private_encrypt, src, len, impl_, true, getPadding(padding, false));
 }
 
 std::vector<char> RSA::privateDecryptEx(const char * src, size_t len, Padding padding) const
 {
-    return processEx(&RSA_private_decrypt, src, len, holder().handle(), false, getPadding(padding, true));
+    return processEx(&RSA_private_decrypt, src, len, impl_, false, getPadding(padding, true));
 }
 
 std::vector<char> RSA::extractPublicKey() const
 {
-    ::RSA * src = holder().handle();
+    ::RSA * src = impl_;
     
     BigNums nums;
     nums.push_back(src->n);
@@ -305,7 +320,7 @@ std::vector<char> RSA::extractPublicKey() const
 
 std::vector<char> RSA::extractPrivateKey() const
 {
-    ::RSA * src = holder().handle();
+    ::RSA * src = impl_;
     
     BigNums nums;
     nums.push_back(src->n);

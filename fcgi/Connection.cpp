@@ -172,14 +172,16 @@ bool Connection::processRecords()
                 return false;
             memcpy(&buffer_[0], &buffer_[0] + recordLen, pos_ - recordLen);
             pos_ -= recordLen;
-        }
+        } else
+            MLOG_MESSAGE(Debug, "Non full record: " << recordLen);
     }
     return true;
 }
 
 bool Connection::processRecord(const FCGIRecord & rec)
 {
-    MLOG_MESSAGE(Debug, "processRecord(" << static_cast<int>(rec.type) << ", " << rec.contentLength << ")");
+    MLOG_MESSAGE(Debug, "processRecord(type: " << static_cast<int>(rec.type) << ", len: " << mstd::ntoh(rec.contentLength) << 
+                        ", request: " << mstd::ntoh(rec.requestId) << ", padding: " << rec.paddingLength << ")");
 
     char * begin = &buffer_[0] + sizeof(rec);
     switch(rec.type) {

@@ -45,5 +45,6 @@ MCRYPT_DECL boost::optional<MD5Digest> md5File(const boost::filesystem::wpath & 
 MCRYPT_DECL boost::optional<MD5Digest> md5File(const boost::filesystem::path & path);
 
 MCRYPT_DECL MD5Digest md5String(const std::string & input);
+MCRYPT_DECL MD5Digest md5Buffer(const void * buffer, size_t len);
     
 }

@@ -17,10 +17,11 @@
 
 namespace mstd {
 
-class token_generator::Impl {
+class token_generator_base::Impl {
 public:
-    Impl()
-        : chars_("0123456789abcdefghijklmnopqrstuvwxyz")
+    template<class T>
+    Impl(const T & t)
+        : chars_(t)
     {}
 
     std::string next(size_t len)
@@ -73,18 +74,28 @@ private:
     boost::thread_specific_ptr<Rand> tss_;
 };
 
-token_generator::token_generator()
-    : impl_(new Impl)
+token_generator_base::token_generator_base(const char * source)
+    : impl_(new Impl(source))
 {
 }
 
-token_generator::~token_generator()
+token_generator_base::token_generator_base(const std::string & source)
+    : impl_(new Impl(source))
 {
 }
 
-std::string token_generator::next(size_t len)
+token_generator_base::~token_generator_base()
+{
+}
+
+std::string token_generator_base::next(size_t len)
 {
     return impl_->next(len);
+}
+
+token_generator::token_generator()
+    : token_generator_base("0123456789abcdefghijklmnopqrstuvwxyz")
+{
 }
 
 }

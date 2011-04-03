@@ -91,4 +91,13 @@ MD5Digest md5String(const std::string & str)
     return digest;
 }
 
+MD5Digest md5Buffer(const void * buffer, size_t len)
+{
+    mcrypt::MD5 md5;
+    md5.feed(static_cast<const unsigned char*>(buffer), len);
+    MD5Digest digest;
+    md5.digest(digest);
+    return digest;
+}
+
 }

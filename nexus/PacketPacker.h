@@ -3,6 +3,7 @@
 #ifndef NEXUS_BUILDING
 
 #include <vector>
+#include <deque>
 
 #include <boost/array.hpp>
 
@@ -327,6 +328,12 @@ struct GetPacker<std::vector<T> > {
 };
 
 template<class T>
+struct GetPacker<std::deque<T> > {
+    typedef typename GetPacker<typename boost::remove_cv<T>::type>::type packer;
+    typedef CollectionPacker<packer> type;
+};
+
+template<class T>
 struct GetPacker<boost::unordered_set<T> > {
     typedef typename GetPacker<typename boost::remove_cv<T>::type>::type packer;
     typedef CollectionPacker<packer> type;
@@ -347,7 +354,7 @@ struct GetPacker<boost::iterator_range<It> > {
 
 template<class T>
 struct GetPacker<boost::optional<T> > {
-    typedef typename GetPacker<typename boost::remove_cv<T>::type>::type packer;
+    typedef typename GetPacker<typename boost::remove_cv<typename boost::remove_reference<T>::type>::type>::type packer;
     typedef OptionalPacker<packer> type;
 };
 
@@ -483,7 +490,7 @@ void DerefPacker::pack(char *& out, const T & t)
 class InvalidPackSizeTag;
 typedef mstd::own_exception<InvalidPackSizeTag> InvalidPackSizeException;
 class PacketCodeTag;
-typedef boost::error_info<PacketCodeTag, PacketCode> PacketCodeInfo;
+typedef boost::error_info<PacketCodeTag, int> PacketCodeInfo;
 class ExpectedSizeTag;
 typedef boost::error_info<ExpectedSizeTag, size_t> ExpectedSizeInfo;
 class FoundSizeTag;

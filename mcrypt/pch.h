@@ -29,6 +29,7 @@ namespace std { class runtime_error : public exception { public: runtime_error(c
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
+#include <boost/scope_exit.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/static_assert.hpp>
 
@@ -36,16 +37,17 @@ namespace std { class runtime_error : public exception { public: runtime_error(c
 #include <boost/filesystem/fstream.hpp>
 #endif
 
-#include <openssl/blowfish.h>
-#include <openssl/md5.h>
-#include <openssl/sha.h>
-#include <openssl/hmac.h>
-#include <openssl/evp.h>
 #include <openssl/bio.h>
-#include <openssl/buffer.h>
-#include <openssl/rsa.h>
-#include <openssl/err.h>
+#include <openssl/blowfish.h>
 #include <openssl/bn.h>
+#include <openssl/buffer.h>
+#include <openssl/err.h>
+#include <openssl/evp.h>
+#include <openssl/hmac.h>
+#include <openssl/md5.h>
+#include <openssl/pem.h>
+#include <openssl/rsa.h>
+#include <openssl/sha.h>
 
 #include <mstd/cstdint.hpp>
 #if 0
