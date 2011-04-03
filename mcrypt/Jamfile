@@ -1,6 +1,1 @@
-import pch ;
-
-cpp-pch pch : pch.h : <include>. <toolset>gcc:<location>. ;
-explicit pch ;
-
-lib mcrypt : pch [ glob *.cpp ] ;
+lib mcrypt : [ glob *.cpp ] ;

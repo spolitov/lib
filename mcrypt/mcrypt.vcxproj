@@ -185,9 +185,6 @@
     <ClInclude Include="TEA.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\mlog\mlog.vcproj" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -14,6 +14,8 @@
 
 #include "Defines.h"
 
+struct rsa_st;
+
 namespace mcrypt {
 
 typedef unsigned long error_t;
@@ -32,6 +34,7 @@ public:
     static RSAPtr generateKey(int num, unsigned long e, const GenerateListener & listener);
     static RSAPtr createFromPublicKey(const std::vector<char> & src);
     static RSAPtr createFromPrivateKey(const std::vector<char> & src);
+    static RSAPtr createFromPublicPem(const void * buffer, size_t len);
     
     int size() const;
     
@@ -131,14 +134,9 @@ public:
     ~RSA();
 
 private:
-    class Holder;
+    explicit RSA(rsa_st * rsa);
 
-    explicit RSA(Holder * holder);
-    explicit RSA(boost::scoped_ptr<Holder> & holder);
-
-    const Holder & holder() const;
-
-    boost::scoped_ptr<Holder> holder_;
+    rsa_st * impl_;
 };
 
 class MCRYPT_DECL RSAException : public std::exception {
