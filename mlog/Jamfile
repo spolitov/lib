@@ -16,4 +16,4 @@ lib boost_filesystem : : <name>boost_filesystem <variant>release ;
 lib boost_filesystem : : <name>boost_filesystem <variant>profile ;
 
 
-lib mlog : pch [ glob *.cpp ] boost_thread boost_system ../mstd ;
+lib mlog : pch [ glob *.cpp ] boost_thread boost_system /site-config//boost_filesystem ../mstd ;
