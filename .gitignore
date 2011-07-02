@@ -5,3 +5,5 @@
 /swutils
 /xmldom
 .svn
+*.mode1v3
+*.pbxuser
