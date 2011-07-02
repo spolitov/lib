@@ -1,16 +1,28 @@
-#if !defined(_STLP_NO_IOSTREAMS) && !defined(__APPLE__)
+#if !defined(_STLP_NO_IOSTREAMS)
 
 #if defined(_MSC_VER)
 #pragma warning(disable: 4100)
 #pragma warning(disable: 4512)
 #endif
 
+#if !__APPLE__
 #include <boost/spirit/home/qi.hpp>
+#else
+#include <string>
+#endif
 
 #include "email.hpp"
 
 namespace mstd {
 
+#if __APPLE__
+bool verifyEmail(const std::string & input)
+{
+    return true;
+}
+
+#else
+    
 template<class It>
 class email_grammar : public boost::spirit::qi::grammar<It> {
 public:
@@ -49,6 +61,8 @@ bool verifyEmail(const std::string & input)
     return verifyEmail(input.begin(), input.end());
 }
 
+#endif
+    
 }
 
 #endif

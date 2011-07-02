@@ -33,11 +33,26 @@ void convert(const boost::property_tree::wptree & in, boost::property_tree::ptre
     }
 }
 
+template<class Ch>
+void cleanup(boost::property_tree::basic_ptree<std::basic_string<Ch>, std::basic_string<Ch> > & tree)
+{
+    bool hasElements = false;
+    for(typename boost::property_tree::basic_ptree<std::basic_string<Ch>, std::basic_string<Ch> >::iterator i = tree.begin(), end = tree.end(); i != end; ++i)
+    {
+        if(!hasElements && i->first != boost::property_tree::xml_parser::xmlattr<Ch>() && i->first != boost::property_tree::xml_parser::xmltext<Ch>())
+            hasElements = true;
+        cleanup(i->second);
+    }
+    if(hasElements)
+        tree.data().clear();
+}
+
 void read_xml(std::istream & inp, boost::property_tree::wptree & out)
 {
     out.clear();
     boost::property_tree::ptree temp;
     boost::property_tree::read_xml(inp, temp);
+    cleanup(temp);
     convert(temp, out);
 }
 

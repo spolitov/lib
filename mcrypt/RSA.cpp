@@ -133,7 +133,7 @@ RSAPtr RSA::createFromPrivateKey(const std::vector<char> & src)
 
 RSAPtr RSA::createFromPublicPem(const void * buf, size_t len)
 {
-    BIO * bmem = BIO_new_mem_buf(const_cast<void*>(buf), len);
+    BIO * bmem = BIO_new_mem_buf(const_cast<void*>(buf), static_cast<int>(len));
     EVP_PKEY * key = PEM_read_bio_PUBKEY(bmem, 0, 0, 0);
     BIO_free_all(bmem);
 

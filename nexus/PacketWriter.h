@@ -34,6 +34,23 @@ inline void writeCString(char *& out, const std::string & str)
     out += len;
 }
 
+inline void writeLenString(char *& out, const char * str, size_t len)
+{
+    write<uint16_t>(out, len);
+    memcpy(out, str, len);
+    out += len;
+}
+
+inline void writeLenString(char *& out, const char * str)
+{
+    writeLenString(out, str, strlen(str));
+}
+
+inline void writeLenString(char *& out, const std::string & str)
+{
+    writeLenString(out, str.c_str(), str.length());
+}
+
 inline void writePacked(char *& p, boost::uint32_t size)
 {
     if(size <= 0x7fff)

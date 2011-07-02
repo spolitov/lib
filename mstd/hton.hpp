@@ -3,6 +3,8 @@
 
 #if defined(_MSC_VER)
 #include <stdlib.h>
+#elif __APPLE__
+#include <libkern/OSByteOrder.h>
 #else
 #include <endian.h>
 #endif
@@ -31,6 +33,8 @@ namespace mstd {
             {
 #if defined(_MSC_VER)
                 return _byteswap_ushort(t);
+#elif __APPLE__
+                return OSSwapHostToBigInt16(t);
 #else
                 return htobe16(t);
 #endif
@@ -44,6 +48,8 @@ namespace mstd {
             {
 #if defined(_MSC_VER)
                 return _byteswap_ulong(t);
+#elif __APPLE__
+                return OSSwapHostToBigInt32(t);
 #else
                 return htobe32(t);
 #endif
@@ -57,6 +63,8 @@ namespace mstd {
             {
 #if defined(_MSC_VER)
                 return _byteswap_uint64(t);
+#elif __APPLE__
+                return OSSwapHostToBigInt64(t);
 #else
                 return htobe64(t);
 #endif

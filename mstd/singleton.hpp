@@ -13,7 +13,10 @@ namespace detail {
     MSTD_DECL void MSTD_STDCALL register_cleaner(void (MSTD_STDCALL *cleaner)());
 }
 
-void MSTD_STDCALL call_once(boost::uint32_t & flag, void (MSTD_STDCALL *f)());
+typedef boost::uint32_t once_flag;
+#define MSTD_ONCE_INIT 0
+
+void MSTD_STDCALL call_once(once_flag & flag, void (MSTD_STDCALL *f)());
 
 template<class T>
 class singleton : private boost::noncopyable {
@@ -37,16 +40,19 @@ private:
 
     static T* instance_;
     static mstd::mutex mutex_;
-    static boost::uint32_t once_;
+    static once_flag once_;
 };
 
 template<class T>
 T* singleton<T>::instance_;
 
 template<class T>
-boost::uint32_t singleton<T>::once_ = 0;
+once_flag singleton<T>::once_ = MSTD_ONCE_INIT;
 
 #define MSTD_SINGLETON_DECLARATION(T) friend class mstd::singleton<T>;
+#define MSTD_SINGLETON_DEFINITION(T) public: static T & instance(); private: MSTD_SINGLETON_DECLARATION(T)
+#define MSTD_SINGLETON_INLINE_DEFINITION(T) public: static T & instance() { return mstd::singleton<T>::instance(); } private: MSTD_SINGLETON_DECLARATION(T)
+#define MSTD_SINGLETON_IMPLEMENTATION(T) T & T::instance() { return mstd::singleton<T>::instance(); }
 
 namespace detail {
     template<class T>

@@ -41,7 +41,7 @@ private:
         Rand(const char * chars, size_t len)
             : chars_(chars),
               generator_(seed()),
-              distribution_(0, len - 1)
+              distribution_(0, static_cast<int>(len) - 1)
         {}
 
         char operator()()

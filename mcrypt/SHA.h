@@ -18,8 +18,7 @@ public:
     SHA();
     ~SHA();
     
-    void feed(const unsigned char * src, size_t len);
-    void feed(const char * src, size_t len);
+    void feed(const void * src, size_t len);
     void feed(const std::vector<char> & src);
     void feed(const std::vector<unsigned char> & src);
 
@@ -36,5 +35,6 @@ MCRYPT_DECL boost::optional<SHADigest> shaFile(const boost::filesystem::wpath & 
 MCRYPT_DECL boost::optional<SHADigest> shaFile(const boost::filesystem::path & path);
 
 MCRYPT_DECL SHADigest shaString(const std::string & input);
+MCRYPT_DECL SHADigest shaBuffer(const void * data, size_t len);
     
 }

@@ -48,7 +48,7 @@ public:
         const char_type * end = s + n;
         size_t c = std::min<size_t>(end - s, epptr() - pptr());
         memcpy(pptr(), s, c);
-        pbump(c);
+        pbump(static_cast<int>(c));
         s += c;
         if(s != end)
         {

@@ -2,8 +2,6 @@
 
 #include <boost/config.hpp>
 
-#ifndef __APPLE__
-
 #ifdef BOOST_WINDOWS
 #include <Windows.h>
 #else
@@ -78,6 +76,9 @@ public:
     {
 #ifdef BOOST_WINDOWS
         QueryPerformanceCounter(&value_);
+#elif __APPLE__
+        value_.tv_sec = 0;
+        value_.tv_nsec = 0;
 #else
         clock_gettime(CLOCK_THREAD_CPUTIME_ID, &value_);
 #endif    
@@ -137,6 +138,3 @@ private:
 };
 
 }
-
-#endif
-

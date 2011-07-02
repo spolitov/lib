@@ -13,4 +13,4 @@
 #lib boost_filesystem : : <name>boost_filesystem <variant>profile <toolset>gcc ;
 #lib boost_filesystem : : <toolset>msvc ;
 
-lib mstd : [ glob *.cpp ] /site-config//boost_filesystem /site-config//boost_system /site-config//boost_thread ;
+lib mstd : [ glob *.cpp ] ; #/site-config//boost_filesystem /site-config//boost_system /site-config//boost_thread ;

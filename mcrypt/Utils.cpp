@@ -14,7 +14,7 @@ void bfcrypt(const std::string & password, const char * begin, const char * end,
 {
     output.resize(4 + (end - begin + 7) / 8 * 8);
     char * p = &output[0];
-    *mstd::pointer_cast<boost::uint32_t*>(p) = end - begin;
+    *mstd::pointer_cast<uint32_t*>(p) = static_cast<uint32_t>(end - begin);
 
     Blowfish bf(password);
     bf.encrypt(begin, end, p + 4);

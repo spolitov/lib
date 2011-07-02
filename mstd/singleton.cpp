@@ -12,7 +12,7 @@
 
 namespace mstd { 
 
-void MSTD_STDCALL call_once(boost::uint32_t & flag, void (MSTD_STDCALL *f)())
+void MSTD_STDCALL call_once(once_flag & flag, void (MSTD_STDCALL *f)())
 {
     if(boost::interprocess::detail::atomic_read32(&flag) != 1)
     {
@@ -43,7 +43,7 @@ typedef void (MSTD_STDCALL *cleaner_type)();
 typedef std::vector<cleaner_type> Cleaners;
 
 Cleaners* cleaners_;
-boost::uint32_t once_ = 0;
+once_flag once_ = MSTD_ONCE_INIT;
 mstd::mutex * mutex_ = 0;
 
 void cleanup()

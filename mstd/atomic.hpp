@@ -195,13 +195,13 @@ public:
 
     atomic<T> & operator=(T rhs)
     { 
-        atomic_write(rhs);
+        this->atomic_write(rhs);
         return *this;
     }
 
     atomic<T> & operator=(const atomic<T> & rhs)
     { 
-        atomic_write(rhs);
+        this->atomic_write(rhs);
         return *this;
     }
 

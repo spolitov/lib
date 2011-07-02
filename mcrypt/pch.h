@@ -10,6 +10,7 @@
 #endif
 
 #include <boost/config.hpp>
+#include <boost/version.hpp>
 
 #include <string.h>
 

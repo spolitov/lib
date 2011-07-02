@@ -9,7 +9,7 @@ StackStream::StackStream(char * begin, size_t size)
 
 void StackStream::put(const char * str)
 {
-    ptrdiff_t n = strnlen(str, end_ - pos_ + 1);
+    ptrdiff_t n = std::find(str, str + (end_ - pos_) + 1, 0) - str;
     checkOverflow(n);
     memcpy(pos_, str, n);
     pos_ += n;

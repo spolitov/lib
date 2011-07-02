@@ -71,10 +71,12 @@ boost::optional<MD5Digest> md5File(const std::wstring & filename)
     return md5File(boost::filesystem::wpath(filename));
 }
 
+#if BOOST_VERSION < 104600
 boost::optional<MD5Digest> md5File(const boost::filesystem::wpath & path)
 {
     return md5FileImpl(path);
 }
+#endif
 
 boost::optional<MD5Digest> md5File(const boost::filesystem::path & path)
 {

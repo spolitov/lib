@@ -206,7 +206,7 @@ public:
     void readCString(std::string & result, size_t max)
     {
         const char * p = pos_;
-        const char * end = p + strnlen(p, max);
+        const char * end = std::find(p, p + max, 0);
         if(*end)
             throw InvalidStringException();
         pos_ = end + 1;

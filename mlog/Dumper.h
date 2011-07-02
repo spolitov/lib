@@ -76,12 +76,12 @@ struct StringTraits;
 
 template<>
 struct StringTraits<char> {
-    static int length(const char * src)
+    static size_t length(const char * src)
     {
 	return strlen(src);
     }
 
-    static void out(std::ostream & out, const char * src, int len)
+    static void out(std::ostream & out, const char * src, size_t len)
     {
         out << std::string(src, len);
     }
@@ -89,12 +89,12 @@ struct StringTraits<char> {
 
 template<>
 struct StringTraits<wchar_t> {
-    static int length(const wchar_t * src)
+    static size_t length(const wchar_t * src)
     {
 	return wcslen(src);
     }
 
-    static void out(std::ostream & out, const wchar_t * src, int len)
+    static void out(std::ostream & out, const wchar_t * src, size_t len)
     {
         out << mstd::utf8(std::wstring(src, len));
     }

@@ -6,6 +6,8 @@
 #include <boost/array.hpp>
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
+
+#include <boost/filesystem/path.hpp>
 #endif
 
 #include "Config.h"

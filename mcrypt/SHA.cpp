@@ -20,14 +20,9 @@ SHA::SHA()
 SHA::~SHA()
 {}
 
-void SHA::feed(const unsigned char * src, size_t len)
+void SHA::feed(const void * src, size_t len)
 {
     SHA1_Update(&context_->value_, src, len);
-}
-
-void SHA::feed(const char * src, size_t len)
-{
-    feed(mstd::pointer_cast<const unsigned char*>(src), len);
 }
 
 void SHA::feed(const std::vector<unsigned char> & src)
@@ -81,10 +76,12 @@ boost::optional<SHADigest> shaFile(const std::wstring & filename)
     return shaFile(boost::filesystem::wpath(filename));
 }
 
+#if BOOST_VERSION < 104600
 boost::optional<SHADigest> shaFile(const boost::filesystem::wpath & path)
 {
     return shaFileImpl(path);
 }
+#endif
 
 boost::optional<SHADigest> shaFile(const boost::filesystem::path & path)
 {
@@ -96,6 +93,15 @@ SHADigest shaString(const std::string & str)
 {
     mcrypt::SHA sha;
     sha.feed(str.c_str(), str.length());
+    SHADigest digest;
+    sha.digest(digest);
+    return digest;
+}
+
+SHADigest shaBuffer(const void * data, size_t len)
+{
+    mcrypt::SHA sha;
+    sha.feed(data, len);
     SHADigest digest;
     sha.digest(digest);
     return digest;

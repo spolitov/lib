@@ -1,5 +1,3 @@
-#ifndef __APPLE__
-
 #if !_STLP_NO_IOSTREAMS
 #include <ostream>
 #endif
@@ -25,6 +23,3 @@ std::ostream & operator<<(std::ostream & out, performance_mark m)
 #endif
 
 }
-
-#endif
-
