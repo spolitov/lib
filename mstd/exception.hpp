@@ -13,7 +13,9 @@
 #include <boost/exception/info.hpp>
 #include <boost/exception/get_error_info.hpp>
 
+#if !defined(MSTD_NO_ERROR_CODE)
 #include <boost/system/error_code.hpp>
+#endif
 
 #include <boost/type_traits/is_base_of.hpp>
 
@@ -29,8 +31,10 @@ class tag_message;
 typedef boost::error_info<tag_message, std::string> error_message;
 class tag_errno;
 typedef boost::error_info<tag_errno, int> error_no;
+#if !defined(MSTD_NO_ERROR_CODE)
 class tag_errcode;
 typedef boost::error_info<tag_errno, boost::system::error_code> error_code;
+#endif
 
 inline error_message make_error_message(const std::string & text)
 {

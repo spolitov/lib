@@ -3,75 +3,149 @@
 #include <string>
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 #include <mstd/cstdint.hpp>
+
+#if !SQLITE_NO_EXCEPTIONS
 #include <mstd/exception.hpp>
+#endif
+
+struct sqlite3;
+struct sqlite3_stmt;
 
 namespace sqlite {
 
 class SQLite;
 
-class SQLiteStatement : private boost ::noncopyable {
+class ErrorCode {
 public:
+    ErrorCode() : err_(0)
+    {}
+
+    explicit ErrorCode(int err, const std::string & message)
+        : err_(err), message_(message) {}
+    
+    void reset(int err, const std::string & message)
+    {
+        err_ = err;
+        message_ = message;
+    }
+    
+    typedef int ErrorCode::*unspecified_bool_type;
+
+    operator unspecified_bool_type() const
+    {
+        return err_ ? &ErrorCode::err_ : 0;
+    }
+   
+    const std::string & message() const { return message_; }
+
+#if !SQLITE_NO_EXCEPTIONS    
+    void check();
+#endif
+private:
+    int err_;
+    std::string message_;
+};
+
+class SQLiteStatement : private boost::noncopyable {
+public:
+#if !SQLITE_NO_EXCEPTIONS
     SQLiteStatement(SQLite & db, const std::string & sql);
     SQLiteStatement(SQLite & db, const std::wstring & sql);
+#endif
+    SQLiteStatement(SQLite & db, const std::string & sql, ErrorCode & ec);
+    SQLiteStatement(SQLite & db, const std::wstring & sql, ErrorCode & ec);
+
     ~SQLiteStatement();
 
+#if !SQLITE_NO_EXCEPTIONS
     void reset();
     bool step();
+#endif
+    void reset(ErrorCode & ec);
+    bool step(ErrorCode & ec);
 
-    void bindInt64(int index, boost::int64_t value);
-    void bindInt(int index, boost::int32_t value);
+    void bindInt64(int index, int64_t value);
+    void bindInt(int index, int32_t value);
     void bindString(int index, const std::string & value);
     
     template<class T, class S>
-    typename boost::enable_if<boost::is_same<T, boost::int64_t>, void>::type
+    typename boost::enable_if<boost::is_same<T, int64_t>, void>::type
     bind(int index, S value)
     {
         bindInt64(index, value);
     }
 
-    int getInt(int col);
-    boost::int64_t getInt64(int col);
+    int32_t getInt(int col);
+    int64_t getInt64(int col);
     double getDouble(int col);
     std::string getString(int col);
     std::wstring getWString(int col);
+    bool isNull(int col);
 private:
-    class Impl;
-    
-    friend class SQLite;
-
-    boost::scoped_ptr<Impl> impl_;
+    SQLite & db_;
+    sqlite3_stmt * handle_;
+#if !defined(MLOG_NO_LOGGING)
+    std::string sql_;
+#endif
 };
 
 class SQLite : private boost::noncopyable {
 public:
+#if !SQLITE_NO_EXCEPTIONS
     SQLite(const std::string & filename);
     SQLite(const std::wstring & filename);
+#endif
 
+    SQLite(const std::string & filename, ErrorCode & ec);
+    SQLite(const std::wstring & filename, ErrorCode & ec);
+    
+    SQLite();
+    void open(const std::string & filename, ErrorCode & ec);
+    void open(const std::wstring & filename, ErrorCode & ec);
+
+    sqlite3 * handle();
+#if !SQLITE_NO_EXCEPTIONS
     void exec(const std::string & sql);
+#endif
+    void exec(const std::string & sql, ErrorCode & ec);
 
     ~SQLite();
 private:
-    class Impl;
-    
-    friend class SQLiteStatement::Impl;
-    
-    boost::scoped_ptr<Impl> impl_;
+    sqlite3 * handle_;
 };
 
 class Transaction : public boost::noncopyable {
 public:
+#if !SQLITE_NO_EXCEPTIONS
     explicit Transaction(SQLite & db);
+#endif
+    explicit Transaction(SQLite & db, ErrorCode & ec);
+
     ~Transaction();
 
+#if !SQLITE_NO_EXCEPTIONS
     void commit();
+#endif
+    void commit(ErrorCode & ec);
 private:
-    SQLite & db_;
+    SQLite * db_;
     bool ok_;
 };
 
-typedef mstd::own_exception<SQLite> SQLiteException;
+#if !SQLITE_NO_EXCEPTIONS
+class SQLiteException : std::exception {
+public:
+    explicit SQLiteException(const char * msg)
+        : what_(msg) {}
+    ~SQLiteException() throw() {}
+
+    const char* what() const throw() { return what_.c_str(); }
+private:
+    std::string what_;
+};
+#endif
 
 }
