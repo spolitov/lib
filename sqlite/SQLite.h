@@ -78,6 +78,13 @@ public:
         bindInt64(index, value);
     }
 
+    template<class T, class S>
+    typename boost::enable_if<boost::is_same<T, int32_t>, void>::type
+    bind(int index, S value)
+    {
+        bindInt(index, value);
+    }
+
     int32_t getInt(int col);
     int64_t getInt64(int col);
     double getDouble(int col);
@@ -105,6 +112,8 @@ public:
     SQLite();
     void open(const std::string & filename, ErrorCode & ec);
     void open(const std::wstring & filename, ErrorCode & ec);
+
+    int64_t lastInsertRowId();
 
     sqlite3 * handle();
 #if !SQLITE_NO_EXCEPTIONS

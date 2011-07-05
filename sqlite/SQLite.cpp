@@ -151,6 +151,11 @@ sqlite3 * SQLite::handle()
     return handle_;
 }
 
+int64_t SQLite::lastInsertRowId()
+{
+    return sqlite3_last_insert_rowid(handle_);
+}
+
 SQLite::~SQLite()
 {
     if(handle_)
@@ -220,12 +225,12 @@ SQLiteStatement::~SQLiteStatement()
         sqlite3_finalize(handle_);
 }
 
-void SQLiteStatement::bindInt(int index, boost::int32_t value)
+void SQLiteStatement::bindInt(int index, int32_t value)
 {
     sqlite3_bind_int(handle_, index, value);
 }
 
-void SQLiteStatement::bindInt64(int index, boost::int64_t value)
+void SQLiteStatement::bindInt64(int index, int64_t value)
 {
     sqlite3_bind_int64(handle_, index, value);
 }
