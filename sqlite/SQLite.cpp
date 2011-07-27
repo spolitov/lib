@@ -188,18 +188,18 @@ SQLiteStatement::SQLiteStatement(SQLite & db, const std::string & sql)
 {
     ErrorCode ec;
     handle_ = sqlitePrepare(db, sql, ec);
-    ec.check()
+    ec.check();
 }
 
 SQLiteStatement::SQLiteStatement(SQLite & db, const std::wstring & sql)
     : db_(db)
 #if !defined(MLOG_NO_LOGGING)
-          , sql_(sql)
+          , sql_(mstd::utf8(sql))
 #endif
 {
     ErrorCode ec;
     handle_ = sqlitePrepare(db, sql_, ec);
-    ec.check()
+    ec.check();
 }
 #endif
 
@@ -270,6 +270,14 @@ bool SQLiteStatement::step(ErrorCode & ec)
     }
 }
 
+bool SQLiteStatement::step()
+{
+    ErrorCode ec;
+    bool result = step(ec);
+    ec.check();
+    return result;
+}
+
 int32_t SQLiteStatement::getInt(int col)
 {
     return sqlite3_column_int(handle_, col);
@@ -312,6 +320,16 @@ Transaction::Transaction(SQLite & db, ErrorCode & ec)
         db_ = 0;
 }
 
+Transaction::Transaction(SQLite & db)
+    : db_(&db), ok_(false)
+{
+    ErrorCode ec;
+    db_->exec("begin", ec);
+    if(ec)
+        db_ = 0;
+    ec.check();
+}
+
 Transaction::~Transaction()
 {
     if(db_ && !ok_)
@@ -329,6 +347,13 @@ void Transaction::commit(ErrorCode & ec)
         ok_ = !ec;
     } else
         ok_ = true;
+}
+
+void Transaction::commit()
+{
+    ErrorCode ec;
+    commit(ec);
+    ec.check();
 }
 
 }

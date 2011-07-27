@@ -145,16 +145,7 @@ private:
 };
 
 #if !SQLITE_NO_EXCEPTIONS
-class SQLiteException : std::exception {
-public:
-    explicit SQLiteException(const char * msg)
-        : what_(msg) {}
-    ~SQLiteException() throw() {}
-
-    const char* what() const throw() { return what_.c_str(); }
-private:
-    std::string what_;
-};
+typedef mstd::own_exception<SQLite> SQLiteException;
 #endif
 
 }
