@@ -92,6 +92,9 @@
 		C32456871352A9C800999158 /* wide_stream.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C32456311352A9C800999158 /* wide_stream.hpp */; };
 		C32456881352A9C800999158 /* xml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C32456321352A9C800999158 /* xml.cpp */; };
 		C32456891352A9C800999158 /* xml.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C32456331352A9C800999158 /* xml.hpp */; };
+		C346433F13D3339000716430 /* filesystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C346433C13D3339000716430 /* filesystem.cpp */; };
+		C346434013D3339000716430 /* process.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C346433D13D3339000716430 /* process.cpp */; };
+		C346434113D3339000716430 /* process.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C346433E13D3339000716430 /* process.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -181,6 +184,9 @@
 		C32456311352A9C800999158 /* wide_stream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = wide_stream.hpp; sourceTree = SOURCE_ROOT; };
 		C32456321352A9C800999158 /* xml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xml.cpp; sourceTree = SOURCE_ROOT; };
 		C32456331352A9C800999158 /* xml.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = xml.hpp; sourceTree = SOURCE_ROOT; };
+		C346433C13D3339000716430 /* filesystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = filesystem.cpp; sourceTree = SOURCE_ROOT; };
+		C346433D13D3339000716430 /* process.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = process.cpp; sourceTree = SOURCE_ROOT; };
+		C346433E13D3339000716430 /* process.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = process.hpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +219,9 @@
 		C324559A1352A6B900999158 /* mstd */ = {
 			isa = PBXGroup;
 			children = (
+				C346433C13D3339000716430 /* filesystem.cpp */,
+				C346433D13D3339000716430 /* process.cpp */,
+				C346433E13D3339000716430 /* process.hpp */,
 				C32455DA1352A9C800999158 /* access.hpp */,
 				C32455DB1352A9C800999158 /* any_iterator.hpp */,
 				C32455DC1352A9C800999158 /* atomic_pod.cpp */,
@@ -402,6 +411,7 @@
 				C32456861352A9C800999158 /* utf8.hpp in Headers */,
 				C32456871352A9C800999158 /* wide_stream.hpp in Headers */,
 				C32456891352A9C800999158 /* xml.hpp in Headers */,
+				C346434113D3339000716430 /* process.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,6 +481,8 @@
 				C324567F1352A9C800999158 /* threads.cpp in Sources */,
 				C32456821352A9C800999158 /* token_generator.cpp in Sources */,
 				C32456881352A9C800999158 /* xml.cpp in Sources */,
+				C346433F13D3339000716430 /* filesystem.cpp in Sources */,
+				C346434013D3339000716430 /* process.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,7 +528,6 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(INCLUDE)";
-				LIBRARY_SEARCH_PATHS = /usr/local/boost_1_46_1/stage/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
 				OTHER_LDFLAGS = (
@@ -537,10 +548,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_VERSION = "";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/local/boost_1_46_1/stage/lib,
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -553,10 +560,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_VERSION = "";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/local/boost_1_46_1/stage/lib,
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

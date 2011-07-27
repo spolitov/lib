@@ -229,14 +229,14 @@ public:
     void post(const nexus::Buffer & buffer)
     {
         if(asyncOperations_.prepare())
-            derived().stream().io_service().post(Send<Buffer>(this, buffer));
+            derived().stream().get_io_service().post(Send<Buffer>(this, buffer));
     }
 
     template<class C>
     void postBuffers(const C & c)
     {
         if(asyncOperations_.prepare())
-            derived().stream().io_service().post(Send<C>(this, c));
+            derived().stream().get_io_service().post(Send<C>(this, c));
     }
 private:
     class AsyncHelper;

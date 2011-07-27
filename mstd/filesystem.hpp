@@ -84,4 +84,6 @@ inline std::string apifname(const boost::filesystem::wpath & path)
 #endif
 }
 
+FILE * wfopen(const boost::filesystem::wpath & path, const char * mode);
+
 }

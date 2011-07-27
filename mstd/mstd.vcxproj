@@ -147,9 +147,11 @@
     <ClCompile Include="command_queue.cpp" />
     <ClCompile Include="email.cpp" />
     <ClCompile Include="exception.cpp" />
+    <ClCompile Include="filesystem.cpp" />
     <ClCompile Include="itoa.cpp" />
     <ClCompile Include="Logging.cpp" />
     <ClCompile Include="performance_timer.cpp" />
+    <ClCompile Include="process.cpp" />
     <ClCompile Include="random.cpp" />
     <ClCompile Include="singleton.cpp" />
     <ClCompile Include="strings.cpp" />
@@ -201,6 +203,7 @@
     <ClInclude Include="PImpl.h" />
     <ClInclude Include="pointer_cast.hpp" />
     <ClInclude Include="pre_spirit.hpp" />
+    <ClInclude Include="process.hpp" />
     <ClInclude Include="ptree.hpp" />
     <ClInclude Include="random.hpp" />
     <ClInclude Include="reference_counter.hpp" />

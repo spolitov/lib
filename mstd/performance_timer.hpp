@@ -6,6 +6,8 @@
 #include <Windows.h>
 #else
 #include <time.h>
+#include <sys/times.h>
+#include <unistd.h>
 #endif
 
 #if !_STLP_NO_IOSTREAMS
@@ -76,12 +78,11 @@ public:
     {
 #ifdef BOOST_WINDOWS
         QueryPerformanceCounter(&value_);
-#elif __APPLE__
-        value_.tv_sec = 0;
-        value_.tv_nsec = 0;
-#else
+#elif defined CLOCK_THREAD_CPUTIME_ID
         clock_gettime(CLOCK_THREAD_CPUTIME_ID, &value_);
-#endif    
+#else
+        value_.tv_sec = value_.tv_nsec = 0;
+#endif
     }
 
     friend inline performance_interval operator-(const performance_mark & lhs, const performance_mark & rhs)
