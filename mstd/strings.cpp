@@ -10,6 +10,7 @@
 
 #include <boost/algorithm/string.hpp>
 #else
+#undef _WIN32_IE
 #define _WIN32_IE _WIN32_IE_IE60SP2
 #include <Windows.h>
 #include <Shlwapi.h>

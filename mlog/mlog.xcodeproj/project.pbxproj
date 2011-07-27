@@ -55,7 +55,6 @@
 		C3F10D761352FDE600D8C945 /* Logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = SOURCE_ROOT; };
 		C3F10D771352FDE600D8C945 /* Manager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Manager.cpp; sourceTree = SOURCE_ROOT; };
 		C3F10D781352FDE600D8C945 /* Manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Manager.h; sourceTree = SOURCE_ROOT; };
-		C3F10D7A1352FDE600D8C945 /* mlogTarget.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = mlogTarget.xcconfig; sourceTree = SOURCE_ROOT; };
 		C3F10D7B1352FDE600D8C945 /* Output.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Output.cpp; sourceTree = SOURCE_ROOT; };
 		C3F10D7C1352FDE600D8C945 /* Output.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Output.h; sourceTree = SOURCE_ROOT; };
 		C3F10D7F1352FDE600D8C945 /* pch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pch.h; sourceTree = SOURCE_ROOT; };
@@ -114,7 +113,6 @@
 				C3F10D761352FDE600D8C945 /* Logging.h */,
 				C3F10D771352FDE600D8C945 /* Manager.cpp */,
 				C3F10D781352FDE600D8C945 /* Manager.h */,
-				C3F10D7A1352FDE600D8C945 /* mlogTarget.xcconfig */,
 				C3F10D7B1352FDE600D8C945 /* Output.cpp */,
 				C3F10D7C1352FDE600D8C945 /* Output.h */,
 				C3F10D7F1352FDE600D8C945 /* pch.h */,
@@ -285,6 +283,7 @@
 				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
+					"-headerpad_max_install_names",
 					"-lboost_thread-mt",
 					"-lboost_filesystem-mt",
 					"-lboost_system-mt",
@@ -301,10 +300,6 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/local/boost_1_46_1/stage/lib,
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -316,10 +311,6 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/local/boost_1_46_1/stage/lib,
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
