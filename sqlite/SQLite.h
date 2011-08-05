@@ -42,7 +42,7 @@ public:
     const std::string & message() const { return message_; }
 
 #if !SQLITE_NO_EXCEPTIONS    
-    void check();
+    void check_();
 #endif
 private:
     int err_;

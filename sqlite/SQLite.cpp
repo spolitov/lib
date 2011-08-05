@@ -63,7 +63,7 @@ private:
 };
 
 #if !SQLITE_NO_EXCEPTIONS
-void ErrorCode::check()
+void ErrorCode::check_()
 {
     if(err_ != SQLITE_OK)
         BOOST_THROW_EXCEPTION(SQLiteException() << mstd::error_message(message_) << mstd::error_no(err_));
@@ -96,14 +96,14 @@ SQLite::SQLite(const std::string & filename)
 {
     ErrorCode ec;
     handle_ = sqliteOpen(filename, ec);
-    ec.check();
+    ec.check_();
 }
 
 SQLite::SQLite(const std::wstring & filename)
 {
     ErrorCode ec;
     handle_ = sqliteOpen(mstd::utf8(filename), ec);
-    ec.check();
+    ec.check_();
 }
     
 void SQLite::exec(const std::string & sql)
@@ -188,7 +188,7 @@ SQLiteStatement::SQLiteStatement(SQLite & db, const std::string & sql)
 {
     ErrorCode ec;
     handle_ = sqlitePrepare(db, sql, ec);
-    ec.check();
+    ec.check_();
 }
 
 SQLiteStatement::SQLiteStatement(SQLite & db, const std::wstring & sql)
@@ -199,7 +199,7 @@ SQLiteStatement::SQLiteStatement(SQLite & db, const std::wstring & sql)
 {
     ErrorCode ec;
     handle_ = sqlitePrepare(db, sql_, ec);
-    ec.check();
+    ec.check_();
 }
 #endif
 
@@ -270,13 +270,15 @@ bool SQLiteStatement::step(ErrorCode & ec)
     }
 }
 
+#if !SQLITE_NO_EXCEPTIONS
 bool SQLiteStatement::step()
 {
     ErrorCode ec;
     bool result = step(ec);
-    ec.check();
+    ec.check_();
     return result;
 }
+#endif
 
 int32_t SQLiteStatement::getInt(int col)
 {
@@ -320,6 +322,7 @@ Transaction::Transaction(SQLite & db, ErrorCode & ec)
         db_ = 0;
 }
 
+#if !SQLITE_NO_EXCEPTIONS
 Transaction::Transaction(SQLite & db)
     : db_(&db), ok_(false)
 {
@@ -327,8 +330,9 @@ Transaction::Transaction(SQLite & db)
     db_->exec("begin", ec);
     if(ec)
         db_ = 0;
-    ec.check();
+    ec.check_();
 }
+#endif
 
 Transaction::~Transaction()
 {
@@ -349,11 +353,13 @@ void Transaction::commit(ErrorCode & ec)
         ok_ = true;
 }
 
+#if !SQLITE_NO_EXCEPTIONS
 void Transaction::commit()
 {
     ErrorCode ec;
     commit(ec);
-    ec.check();
+    ec.check_();
 }
+#endif
 
 }
