@@ -39,8 +39,6 @@
 		C35AA4E013538DD100649921 /* PipeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4BE13538DD100649921 /* PipeNode.h */; };
 		C35AA4E113538DD100649921 /* Signals.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4BF13538DD100649921 /* Signals.cpp */; };
 		C35AA4E213538DD100649921 /* Signals.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4C013538DD100649921 /* Signals.h */; };
-		C35AA4E313538DD100649921 /* SocialApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4C113538DD100649921 /* SocialApi.cpp */; };
-		C35AA4E413538DD100649921 /* SocialApi.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4C213538DD100649921 /* SocialApi.h */; };
 		C35AA4E513538DD100649921 /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4C313538DD100649921 /* Socket.cpp */; };
 		C35AA4E613538DD100649921 /* Socket.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4C413538DD100649921 /* Socket.h */; };
 		C35AA4E713538DD100649921 /* StackStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4C513538DD100649921 /* StackStream.cpp */; };
@@ -128,8 +126,6 @@
 		C35AA4BE13538DD100649921 /* PipeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PipeNode.h; sourceTree = SOURCE_ROOT; };
 		C35AA4BF13538DD100649921 /* Signals.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Signals.cpp; sourceTree = SOURCE_ROOT; };
 		C35AA4C013538DD100649921 /* Signals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Signals.h; sourceTree = SOURCE_ROOT; };
-		C35AA4C113538DD100649921 /* SocialApi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SocialApi.cpp; sourceTree = SOURCE_ROOT; };
-		C35AA4C213538DD100649921 /* SocialApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialApi.h; sourceTree = SOURCE_ROOT; };
 		C35AA4C313538DD100649921 /* Socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Socket.cpp; sourceTree = SOURCE_ROOT; };
 		C35AA4C413538DD100649921 /* Socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = SOURCE_ROOT; };
 		C35AA4C513538DD100649921 /* StackStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StackStream.cpp; sourceTree = SOURCE_ROOT; };
@@ -230,8 +226,6 @@
 				C35AA4BE13538DD100649921 /* PipeNode.h */,
 				C35AA4BF13538DD100649921 /* Signals.cpp */,
 				C35AA4C013538DD100649921 /* Signals.h */,
-				C35AA4C113538DD100649921 /* SocialApi.cpp */,
-				C35AA4C213538DD100649921 /* SocialApi.h */,
 				C35AA4C313538DD100649921 /* Socket.cpp */,
 				C35AA4C413538DD100649921 /* Socket.h */,
 				C35AA4C513538DD100649921 /* StackStream.cpp */,
@@ -265,7 +259,6 @@
 				C35AA4DE13538DD100649921 /* pch.h in Headers */,
 				C35AA4E013538DD100649921 /* PipeNode.h in Headers */,
 				C35AA4E213538DD100649921 /* Signals.h in Headers */,
-				C35AA4E413538DD100649921 /* SocialApi.h in Headers */,
 				C35AA4E613538DD100649921 /* Socket.h in Headers */,
 				C35AA4E813538DD100649921 /* StackStream.h in Headers */,
 				C35AA4EA13538DD100649921 /* Utils.h in Headers */,
@@ -373,7 +366,6 @@
 				C35AA4DB13538DD100649921 /* PacketReader.cpp in Sources */,
 				C35AA4DF13538DD100649921 /* PipeNode.cpp in Sources */,
 				C35AA4E113538DD100649921 /* Signals.cpp in Sources */,
-				C35AA4E313538DD100649921 /* SocialApi.cpp in Sources */,
 				C35AA4E513538DD100649921 /* Socket.cpp in Sources */,
 				C35AA4E713538DD100649921 /* StackStream.cpp in Sources */,
 				C35AA4E913538DD100649921 /* Utils.cpp in Sources */,
@@ -425,7 +417,6 @@
 				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
-					"-lurdl-d",
 					"-lboost_system-mt-d",
 					"-lboost_thread-mt-d",
 				);
